@@ -836,6 +836,17 @@ class MattressApp {
       waModalBtn.href = `https://wa.me/77087752172?text=${encodeURIComponent(msg)}`;
     }
 
+    const chipCity = document.getElementById('chipCity');
+    const chipVillage = document.getElementById('chipVillage');
+    const cityGroup = document.getElementById('cityFieldsGroup');
+    const villageGroup = document.getElementById('villageFieldsGroup');
+    if (chipCity && chipVillage && cityGroup && villageGroup) {
+      chipCity.classList.add('active');
+      chipVillage.classList.remove('active');
+      cityGroup.classList.remove('hidden');
+      villageGroup.classList.add('hidden');
+    }
+
     document.getElementById('checkoutModal').classList.add('open');
   }
 

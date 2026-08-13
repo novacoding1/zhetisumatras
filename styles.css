@@ -1807,6 +1807,11 @@ input[type="range"] {
   box-shadow: 0 4px 12px rgba(4, 120, 87, 0.25);
 }
 
+.hidden,
+.loc-fields-group.hidden {
+  display: none !important;
+}
+
 .loc-fields-group {
   display: flex;
   flex-direction: column;
