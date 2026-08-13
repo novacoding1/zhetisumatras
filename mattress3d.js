@@ -1,11 +1,13 @@
-const THREE = window.THREE;
-const OrbitControls = THREE.OrbitControls;
-
 export class Mattress3DStudio {
   constructor(containerElement) {
+    const THREE = window.THREE;
+    if (!THREE) {
+      throw new Error('Three.js library is not loaded');
+    }
+
     this.container = containerElement;
-    this.width = containerElement.clientWidth;
-    this.height = containerElement.clientHeight;
+    this.width = containerElement.clientWidth || 300;
+    this.height = containerElement.clientHeight || 450;
 
     // State Variables
     this.explodeFactor = 0;
@@ -97,13 +99,17 @@ export class Mattress3DStudio {
   }
 
   initControls() {
-    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.controls.enableDamping = true;
-    this.controls.dampingFactor = 0.05;
-    this.controls.maxPolarAngle = Math.PI / 2 - 0.02;
-    this.controls.minDistance = 1.6;
-    this.controls.maxDistance = 12.0;
-    this.controls.target.set(0, 0.3, 0);
+    const THREE = window.THREE;
+    const ControlsClass = THREE ? (THREE.OrbitControls || window.OrbitControls) : null;
+    if (ControlsClass) {
+      this.controls = new ControlsClass(this.camera, this.renderer.domElement);
+      this.controls.enableDamping = true;
+      this.controls.dampingFactor = 0.05;
+      this.controls.maxPolarAngle = Math.PI / 2 - 0.02;
+      this.controls.minDistance = 1.6;
+      this.controls.maxDistance = 12.0;
+      this.controls.target.set(0, 0.3, 0);
+    }
   }
 
   addGroundShadow() {

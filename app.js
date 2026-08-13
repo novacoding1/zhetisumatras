@@ -450,17 +450,44 @@ class MattressApp {
     const container = document.getElementById('canvasContainer');
     const loader = document.getElementById('canvasLoader');
 
-    try {
-      this.studio3d = new Mattress3DStudio(container);
-    } catch (err) {
-      console.error('3D Studio Initialization:', err);
-    } finally {
-      setTimeout(() => {
-        if (loader) loader.classList.add('hidden');
-      }, 500);
+    const hideLoader = () => {
+      if (loader && !loader.classList.contains('hidden')) {
+        loader.classList.add('hidden');
+      }
+    };
+
+    // Guaranteed fail-safe loader removal after 1 second
+    setTimeout(hideLoader, 1000);
+
+    const tryInit = () => {
+      if (this.studio3d) return true;
+      if (window.THREE && container) {
+        try {
+          this.studio3d = new Mattress3DStudio(container);
+          this.onModelUpdate();
+          hideLoader();
+          return true;
+        } catch (err) {
+          console.error('3D Studio Initialization Error:', err);
+          hideLoader();
+          return false;
+        }
+      }
+      return false;
+    };
+
+    if (!tryInit()) {
+      let attempts = 0;
+      const timer = setInterval(() => {
+        attempts++;
+        const success = tryInit();
+        if (success || attempts >= 20) {
+          clearInterval(timer);
+          hideLoader();
+        }
+      }, 150);
     }
 
-    this.onModelUpdate();
     this.renderLayersStack();
   }
 
