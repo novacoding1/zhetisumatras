@@ -686,9 +686,14 @@ class MattressApp {
             <span class="price-cat-label">Цена (<span class="selected-size-val">${activeCardWidth}×200</span>):</span>
             <span class="cat-price">${model.prices[activeCardWidth].toLocaleString('ru-RU')} ₸</span>
           </div>
-          <button class="primary-btn load-cat-btn">
-            <i data-lucide="box"></i> Открыть в 3D (<span class="btn-size-val">${activeCardWidth}×200</span>)
-          </button>
+          <div class="cat-action-grid">
+            <button class="primary-btn load-cat-btn">
+              <i data-lucide="box"></i> 3D Просмотр (<span class="btn-size-val">${activeCardWidth}×200</span>)
+            </button>
+            <a href="https://wa.me/77087752172?text=${encodeURIComponent(`Здравствуйте! Меня интересует матрас ${model.name}. Размер: ${activeCardWidth}×200 см. Цена: ${model.prices[activeCardWidth].toLocaleString('ru-RU')} ₸. Подскажите по наличию и доставке.`)}" target="_blank" class="whatsapp-btn wa-cat-btn">
+              <i data-lucide="message-circle"></i> Заказать в WhatsApp
+            </a>
+          </div>
         </div>
       `;
 
@@ -701,10 +706,14 @@ class MattressApp {
           card.querySelectorAll('.card-size-chip').forEach(c => c.classList.remove('active'));
           chip.classList.add('active');
 
-          const newPrice = model.prices[selectedW].toLocaleString('ru-RU') + ' ₸';
+          const formattedPriceVal = model.prices[selectedW].toLocaleString('ru-RU');
+          const newPrice = formattedPriceVal + ' ₸';
           card.querySelector('.cat-price').textContent = newPrice;
           card.querySelector('.selected-size-val').textContent = `${selectedW}×200`;
           card.querySelector('.btn-size-val').textContent = `${selectedW}×200`;
+
+          const waText = `Здравствуйте! Меня интересует матрас ${model.name}. Размер: ${selectedW}×200 см. Цена: ${formattedPriceVal} ₸. Подскажите по наличию и доставке.`;
+          card.querySelector('.wa-cat-btn').href = `https://wa.me/77087752172?text=${encodeURIComponent(waText)}`;
         });
       });
 
@@ -765,6 +774,14 @@ class MattressApp {
     document.getElementById('modalFirmness').textContent = document.getElementById('statFirmness').textContent;
     document.getElementById('modalCoverName').textContent = this.coverType.toUpperCase();
     document.getElementById('modalTotalPrice').textContent = document.getElementById('statPrice').textContent;
+
+    // Update WhatsApp checkout button text in modal
+    const waModalBtn = document.getElementById('waModalCheckoutBtn');
+    if (waModalBtn) {
+      let layersSummary = this.layers.map(l => `${l.name} (${l.thickness}см)`).join(', ');
+      const msg = `Здравствуйте! Хочу оформить заказ матраса:\n• Размер: ${this.widthCm}×${this.lengthCm} см\n• Высота: ${totalHeightCm} см\n• Наполнители: ${layersSummary}\n• Чехол: ${this.coverType.toUpperCase()}\n• Итоговая цена: ${document.getElementById('statPrice').textContent}`;
+      waModalBtn.href = `https://wa.me/77087752172?text=${encodeURIComponent(msg)}`;
+    }
 
     document.getElementById('checkoutModal').classList.add('open');
   }

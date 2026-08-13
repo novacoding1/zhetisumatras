@@ -512,8 +512,14 @@
             </div>
 
             <button type="submit" class="primary-btn submit-order-btn pulse-glow">
-              <i data-lucide="send"></i> Подтвердить Заказ Матраса
+              <i data-lucide="send"></i> Подтвердить Заказ на Сайте
             </button>
+
+            <div class="or-divider"><span>ИЛИ</span></div>
+
+            <a href="https://wa.me/77087752172" target="_blank" class="whatsapp-btn wa-modal-btn" id="waModalCheckoutBtn">
+              <i data-lucide="message-circle"></i> Написать Напрямую в WhatsApp (+7 708 775 2172)
+            </a>
           </form>
 
         </div>
@@ -521,11 +527,16 @@
     </div>
   </div>
 
+  <!-- Floating WhatsApp Quick Consultation Button (+7 708 775 2172) -->
+  <a href="https://wa.me/77087752172?text=Здравствуйте!%20Хочу%20получить%20консультацию%20по%20матрасам%207SU%20MATRAS." target="_blank" class="floating-wa-btn" aria-label="Связаться в WhatsApp">
+    <i data-lucide="message-circle"></i>
+    <span class="wa-tooltip">WhatsApp Консультация: +7 708 775 2172</span>
+  </a>
+
   <!-- Toast Notification Container -->
   <div class="toast-container" id="toastContainer"></div>
 
-  <!-- Application Logic Modules -->
-  <script type="module" src="./app.js"></script>
-
+  <script src="mattress3d.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
