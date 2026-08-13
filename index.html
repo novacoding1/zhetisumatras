@@ -489,36 +489,92 @@
           </div>
 
           <form class="checkout-form" id="checkoutForm">
-            <h4><i data-lucide="user"></i> Данные Доставки</h4>
+            <h4><i data-lucide="user"></i> АНКЕТА ДОСТАВКИ</h4>
             
             <div class="form-group">
-              <label>Ваше Имя и Фамилия:</label>
-              <input type="text" required placeholder="Например: Арман Сарманов">
+              <label>ФИО Покупателя:</label>
+              <input type="text" id="custName" required placeholder="Например: Арман Сарманов">
             </div>
 
             <div class="form-group">
               <label>Номер Телефона (WhatsApp):</label>
-              <input type="tel" required placeholder="+7 (777) 000-00-00">
+              <input type="tel" id="custPhone" required placeholder="+7 (708) 000-00-00">
             </div>
 
+            <!-- Location Type Selector: City or Village -->
             <div class="form-group">
-              <label>Город и Адрес Доставки:</label>
-              <input type="text" required placeholder="г. Алматы, ул. Абая 150, кв. 45">
+              <label>Тип Населенного Пункта:</label>
+              <div class="loc-type-toggle">
+                <button type="button" class="loc-chip active" id="chipCity">
+                  🏢 Город
+                </button>
+                <button type="button" class="loc-chip" id="chipVillage">
+                  🏡 Село / Поселок
+                </button>
+              </div>
+            </div>
+
+            <!-- Dynamic City Fields -->
+            <div class="loc-fields-group" id="cityFieldsGroup">
+              <div class="form-group">
+                <label>Район / Микрорайон Города:</label>
+                <select id="custMicrodistrict">
+                  <option value="мкр. Сайран">мкр. Сайран</option>
+                  <option value="мкр. Аксай">мкр. Аксай (1, 2, 3, 4)</option>
+                  <option value="мкр. Самал">мкр. Самал (1, 2, 3)</option>
+                  <option value="мкр. Жулдыз">мкр. Жулдыз</option>
+                  <option value="мкр. Мамыр">мкр. Мамыр</option>
+                  <option value="мкр. Тастак">мкр. Тастак</option>
+                  <option value="Алмалинский район">Алмалинский район</option>
+                  <option value="Бостандыкский район">Бостандыкский район</option>
+                  <option value="Медеуский район">Медеуский район</option>
+                  <option value="Ауэзовский район">Ауэзовский район</option>
+                  <option value="Свой район / Микрорайон">Свой район (укажу ниже)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Улица, Номер Дома и Квартиры:</label>
+                <input type="text" id="custCityAddress" placeholder="Например: ул. Абая 150, кв. 45">
+              </div>
+            </div>
+
+            <!-- Dynamic Village Fields -->
+            <div class="loc-fields-group hidden" id="villageFieldsGroup">
+              <div class="form-group">
+                <label>Название Села / Поселка:</label>
+                <input type="text" id="custVillageName" placeholder="Например: село Шелек / с. Узынагаш">
+              </div>
+              <div class="form-group">
+                <label>Название Улицы:</label>
+                <input type="text" id="custStreetName" placeholder="Например: ул. Жамбыла">
+              </div>
+              <div class="form-group">
+                <label>Номер Дома:</label>
+                <input type="text" id="custHouseNum" placeholder="Например: дом 24">
+              </div>
             </div>
 
             <div class="form-group">
               <label>Комментарий к заказу:</label>
-              <textarea rows="2" placeholder="Дополнительные пожелания к доставке..."></textarea>
+              <textarea id="custComment" rows="2" placeholder="Дополнительные пожелания к доставке..."></textarea>
             </div>
 
-            <button type="submit" class="primary-btn submit-order-btn pulse-glow">
-              <i data-lucide="send"></i> Подтвердить Заказ на Сайте
-            </button>
+            <!-- Kaspi Bank Payment Button -->
+            <div class="kaspi-payment-box">
+              <div class="kaspi-price-info">
+                <span>К оплате через <strong>Kaspi.kz</strong>:</span>
+                <span class="kaspi-price-tag" id="kaspiPayAmount">99 000 ₸</span>
+              </div>
+              
+              <button type="submit" class="kaspi-btn pulse-glow" id="btnPayKaspi">
+                <i data-lucide="credit-card"></i> Оплатить через Kaspi.kz
+              </button>
+            </div>
 
-            <div class="or-divider"><span>ИЛИ</span></div>
+            <div class="or-divider"><span>ИЛИ СВЯЗАТЬСЯ В WHATSAPP</span></div>
 
             <a href="https://wa.me/77087752172" target="_blank" class="whatsapp-btn wa-modal-btn" id="waModalCheckoutBtn">
-              <i data-lucide="message-circle"></i> Написать Напрямую в WhatsApp (+7 708 775 2172)
+              <i data-lucide="message-circle"></i> Отправить Анкету в WhatsApp (+7 708 775 2172)
             </a>
           </form>
 

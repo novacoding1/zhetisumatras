@@ -365,7 +365,29 @@ class MattressApp {
     document.getElementById('openCartBtn').addEventListener('click', () => this.openCheckoutModal());
     document.getElementById('statCheckoutBtn').addEventListener('click', () => this.openCheckoutModal());
     document.getElementById('closeCheckoutModal').addEventListener('click', () => this.closeCheckoutModal());
-    
+
+    // Location Type Selector (City vs Village) Toggle
+    const chipCity = document.getElementById('chipCity');
+    const chipVillage = document.getElementById('chipVillage');
+    const cityGroup = document.getElementById('cityFieldsGroup');
+    const villageGroup = document.getElementById('villageFieldsGroup');
+
+    if (chipCity && chipVillage) {
+      chipCity.addEventListener('click', () => {
+        chipCity.classList.add('active');
+        chipVillage.classList.remove('active');
+        cityGroup.classList.remove('hidden');
+        villageGroup.classList.add('hidden');
+      });
+
+      chipVillage.addEventListener('click', () => {
+        chipVillage.classList.add('active');
+        chipCity.classList.remove('active');
+        villageGroup.classList.remove('hidden');
+        cityGroup.classList.add('hidden');
+      });
+    }
+
     document.getElementById('checkoutForm').addEventListener('submit', (e) => {
       e.preventDefault();
       this.handleOrderSubmit();
@@ -798,15 +820,19 @@ class MattressApp {
       layersListEl.appendChild(li);
     });
 
+    const currentPriceText = document.getElementById('statPrice').textContent;
     document.getElementById('modalFirmness').textContent = document.getElementById('statFirmness').textContent;
     document.getElementById('modalCoverName').textContent = this.coverType.toUpperCase();
-    document.getElementById('modalTotalPrice').textContent = document.getElementById('statPrice').textContent;
+    document.getElementById('modalTotalPrice').textContent = currentPriceText;
+
+    const kaspiPayTag = document.getElementById('kaspiPayAmount');
+    if (kaspiPayTag) kaspiPayTag.textContent = currentPriceText;
 
     // Update WhatsApp checkout button text in modal
     const waModalBtn = document.getElementById('waModalCheckoutBtn');
     if (waModalBtn) {
       let layersSummary = this.layers.map(l => `${l.name} (${l.thickness}см)`).join(', ');
-      const msg = `Здравствуйте! Хочу оформить заказ матраса:\n• Размер: ${this.widthCm}×${this.lengthCm} см\n• Высота: ${totalHeightCm} см\n• Наполнители: ${layersSummary}\n• Чехол: ${this.coverType.toUpperCase()}\n• Итоговая цена: ${document.getElementById('statPrice').textContent}`;
+      const msg = `Здравствуйте! Хочу оформить заказ матраса:\n• Размер: ${this.widthCm}×${this.lengthCm} см\n• Высота: ${totalHeightCm} см\n• Наполнители: ${layersSummary}\n• Чехол: ${this.coverType.toUpperCase()}\n• Итоговая цена: ${currentPriceText}`;
       waModalBtn.href = `https://wa.me/77087752172?text=${encodeURIComponent(msg)}`;
     }
 
@@ -818,6 +844,40 @@ class MattressApp {
   }
 
   handleOrderSubmit() {
+    const custName = document.getElementById('custName').value.trim() || 'Покупатель';
+    const custPhone = document.getElementById('custPhone').value.trim() || 'Не указан';
+    const isCity = document.getElementById('chipCity').classList.contains('active');
+
+    let locationDetails = '';
+    if (isCity) {
+      const micro = document.getElementById('custMicrodistrict').value;
+      const addr = document.getElementById('custCityAddress').value.trim();
+      locationDetails = `🏢 Город: ${micro}${addr ? ', ' + addr : ''}`;
+    } else {
+      const vil = document.getElementById('custVillageName').value.trim();
+      const str = document.getElementById('custStreetName').value.trim();
+      const house = document.getElementById('custHouseNum').value.trim();
+      locationDetails = `🏡 Село/Поселок: ${vil || 'не указано'}, ул. ${str || 'не указана'}, дом ${house || 'не указан'}`;
+    }
+
+    const comment = document.getElementById('custComment').value.trim();
+    const totalPrice = document.getElementById('statPrice').textContent;
+    let totalHeightCm = 0;
+    this.layers.forEach(l => { totalHeightCm += l.thickness; });
+    const layersSummary = this.layers.map(l => `${l.name} (${l.thickness}см)`).join(', ');
+
+    // Formatted Order Text for Telegram & WhatsApp
+    const orderMsg = `📬 НОВЫЙ ЗАКАЗ ZHETISUMATRAS!\n\n👤 Покупатель: ${custName}\n📞 Телефон: ${custPhone}\n📍 Адрес: ${locationDetails}\n\n🛏️ Матрас: ${this.currentModelId ? 'Модель из каталога' : 'Индивидуальная 3D Конфигурация'}\n📏 Размер: ${this.widthCm}×${this.lengthCm} см (Высота ${totalHeightCm} см)\n🧩 Состав: ${layersSummary}\n✨ Чехол: ${this.coverType.toUpperCase()}\n\n💳 К ОПЛАТЕ KASPI: ${totalPrice}\n💬 Комментарий: ${comment || 'Нет'}`;
+
+    // 1. Send via WhatsApp to manufacturer (+7 708 775 2172)
+    const waUrl = `https://wa.me/77087752172?text=${encodeURIComponent(orderMsg)}`;
+    window.open(waUrl, '_blank');
+
+    // 2. Open Kaspi Pay / Kaspi Transfer link after 1.2s
+    setTimeout(() => {
+      window.open('https://kaspi.kz/pay/', '_blank');
+    }, 1200);
+
     this.closeCheckoutModal();
 
     if (window.confetti) {
@@ -831,7 +891,7 @@ class MattressApp {
     this.cartCount++;
     document.getElementById('cartBadgeCount').textContent = this.cartCount;
 
-    this.showToast('🎉 Ваш заказ матраса принят! Менеджер Zhetisu Matras свяжется с вами в течение 10 минут.');
+    this.showToast('🎉 Заказ оформлен! Открывается WhatsApp с анкетой и Kaspi.kz для оплаты!');
   }
 
   showToast(message) {
