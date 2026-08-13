@@ -237,6 +237,7 @@ class MattressApp {
     this.cartCount = 0;
 
     this.initUI();
+    this.initBannerSlider();
     this.init3DStudio();
     this.renderCatalogue();
     this.updateCalculations();

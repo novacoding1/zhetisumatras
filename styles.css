@@ -295,6 +295,95 @@ body {
   object-position: center;
 }
 
+/* Hero Interactive Advertising Carousel Banner (Рекламный Слайдер 7SU MATRAS) */
+.hero-banner-slider {
+  background: #064e3b;
+  padding: 1rem;
+  border-bottom: 1px solid rgba(16, 185, 129, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.banner-slider-wrapper {
+  max-width: 1600px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  background: #047857;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.slider-track {
+  display: flex;
+  transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
+}
+
+.slide-item {
+  min-width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #047857;
+}
+
+.slide-img {
+  width: 100%;
+  max-height: 380px;
+  object-fit: contain;
+  display: block;
+  background: #047857;
+}
+
+/* Slider Controls */
+.slider-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(6, 78, 59, 0.75);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all var(--transition-fast);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.slider-arrow:hover {
+  background: #10b981;
+  color: #ffffff;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.prev-arrow { left: 1rem; }
+.next-arrow { right: 1rem; }
+
+.slider-dots {
+  position: absolute;
+  bottom: 0.85rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 10;
+  background: rgba(6, 78, 59, 0.65);
+  backdrop-filter: blur(10px);
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
 .slider-dots .dot {
   width: 10px;
   height: 10px;
