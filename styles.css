@@ -302,9 +302,9 @@ body {
   object-fit: cover;
 }
 
-/* Graphic Slides 2, 3, 4 - Full Frame Fit */
+/* Graphic Slides 2, 3, 4 - Full Frame Wide Banner Fit */
 .graphic-slide {
-  background: #047857;
+  background: #064e3b;
   justify-content: center;
   align-items: center;
   width: 100%;
