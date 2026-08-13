@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZHETISUMATRAS — Премиальные Матрасы и Интерактивный 3D-Конструктор</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="#" class="brand-logo">
+        <div class="logo-icon">
+          <i data-lucide="layers"></i>
+        </div>
+        <div class="logo-text">
+          <span class="brand-name">ZHETISU<span class="highlight">MATRAS</span></span>
+          <span class="brand-sub">Официальный 3D Конструктор</span>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <button class="nav-btn active" data-tab="constructor">
+          <i data-lucide="box"></i> 3D Конструктор
+        </button>
+        <button class="nav-btn" data-tab="catalogue">
+          <i data-lucide="shopping-bag"></i> Каталог Матрасов
+        </button>
+        <button class="nav-btn" data-tab="guide">
+          <i data-lucide="book-open"></i> Путеводитель Наполнителей
+        </button>
+      </nav>
+
+      <div class="nav-actions">
+        <div class="price-chip">
+          <span class="price-label">Итого:</span>
+          <span class="price-val" id="navTotalPrice">99 000 ₸</span>
+        </div>
+        <button class="primary-btn pulse-glow" id="openCartBtn">
+          <i data-lucide="shopping-cart"></i>
+          <span>Оформить Заказ</span>
+          <span class="badge" id="cartBadgeCount">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="app-main">
+
+    <!-- TAB 1: 3D CONSTRUCTOR STUDIO -->
+    <section class="tab-pane active" id="pane-constructor">
+      <div class="constructor-layout">
+
+        <!-- Left Controls Sidebar -->
+        <aside class="control-sidebar">
+          
+          <div class="sidebar-header">
+            <h2><i data-lucide="sliders"></i> Сконструируйте Свой Матрас</h2>
+            <p>Выберите габариты и соберите идеальный слоеный пирог в 3D режиме</p>
+          </div>
+
+          <!-- Step 1: Mattress Dimensions -->
+          <div class="control-group glass-card">
+            <div class="group-title">
+              <span class="step-num">1</span>
+              <h3>Размеры Матраса (см)</h3>
+            </div>
+            
+            <div class="size-preset-grid">
+              <button class="preset-chip" data-w="80" data-l="200">80×200</button>
+              <button class="preset-chip" data-w="90" data-l="200">90×200</button>
+              <button class="preset-chip" data-w="120" data-l="200">120×200</button>
+              <button class="preset-chip" data-w="140" data-l="200">140×200</button>
+              <button class="preset-chip active" data-w="160" data-l="200">160×200</button>
+              <button class="preset-chip" data-w="180" data-l="200">180×200</button>
+              <button class="preset-chip" data-w="200" data-l="200">200×200</button>
+            </div>
+
+            <div class="custom-size-toggle">
+              <label class="toggle-switch">
+                <input type="checkbox" id="customSizeCheck">
+                <span class="slider-round"></span>
+              </label>
+              <span>Свой нестандартный размер</span>
+            </div>
+
+            <div class="custom-size-sliders hidden" id="customSizeControls">
+              <div class="range-field">
+                <div class="range-head">
+                  <span>Ширина:</span>
+                  <strong id="valWidth">160</strong> см
+                </div>
+                <input type="range" id="rangeWidth" min="60" max="220" step="5" value="160">
+              </div>
+              <div class="range-field">
+                <div class="range-head">
+                  <span>Длина:</span>
+                  <strong id="valLength">200</strong> см
+                </div>
+                <input type="range" id="rangeLength" min="120" max="220" step="5" value="200">
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2: Add Fillers to Stack -->
+          <div class="control-group glass-card">
+            <div class="group-title">
+              <span class="step-num">2</span>
+              <h3>Выберите Наполнители</h3>
+            </div>
+            
+            <div class="materials-accordion">
+              
+              <!-- Spring Blocks -->
+              <div class="mat-category open" id="cat-springs">
+                <div class="cat-header">
+                  <span><i data-lucide="disc"></i> Пружинный Блок</span>
+                  <i data-lucide="chevron-down" class="arrow"></i>
+                </div>
+                <div class="cat-body">
+                  <div class="mat-card" data-mat="pocket-spring">
+                    <div class="mat-icon spring-icon"></div>
+                    <div class="mat-info">
+                      <h4>Pocket Spring 500</h4>
+                      <p>Независимый блок (17 см). 500 пруж/м²</p>
+                    </div>
+                    <div class="thickness-select">
+                      <button class="add-mat-btn" data-thick="17">+17 см</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Hard Fillers -->
+              <div class="mat-category open" id="cat-hard">
+                <div class="cat-header">
+                  <span><i data-lucide="shield"></i> Жесткие наполнители</span>
+                  <i data-lucide="chevron-down" class="arrow"></i>
+                </div>
+                <div class="cat-body">
+                  <div class="mat-card" data-mat="coconut">
+                    <div class="mat-icon coconut-icon"></div>
+                    <div class="mat-info">
+                      <h4>Кокосовая Койра</h4>
+                      <p>Придает упругую жесткость</p>
+                    </div>
+                    <div class="thickness-select">
+                      <button class="add-mat-btn" data-thick="1">+1 см</button>
+                      <button class="add-mat-btn" data-thick="2">+2 см</button>
+                      <button class="add-mat-btn" data-thick="3">+3 см</button>
+                    </div>
+                  </div>
+                  <div class="mat-card" data-mat="felt">
+                    <div class="mat-icon felt-icon"></div>
+                    <div class="mat-info">
+                      <h4>Термовойлок</h4>
+                      <p>Защитный изолирующий слой</p>
+                    </div>
+                    <div class="thickness-select">
+                      <button class="add-mat-btn" data-thick="0.5">+0.5 см</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Soft Comfort Fillers -->
+              <div class="mat-category open" id="cat-soft">
+                <div class="cat-header">
+                  <span><i data-lucide="sparkles"></i> Мягкие и анатомические</span>
+                  <i data-lucide="chevron-down" class="arrow"></i>
+                </div>
+                <div class="cat-body">
+                  <div class="mat-card" data-mat="latex">
+                    <div class="mat-icon latex-icon"></div>
+                    <div class="mat-info">
+                      <h4>Натуральный Латекс</h4>
+                      <p>Бельгийский премиум латекс</p>
+                    </div>
+                    <div class="thickness-select">
+                      <button class="add-mat-btn" data-thick="2">+2 см</button>
+                      <button class="add-mat-btn" data-thick="3">+3 см</button>
+                    </div>
+                  </div>
+                  <div class="mat-card" data-mat="foam">
+                    <div class="mat-icon foam-icon"></div>
+                    <div class="mat-info">
+                      <h4>Ортопедическая Пена HR</h4>
+                      <p>Комфортная высокоэластичная пена</p>
+                    </div>
+                    <div class="thickness-select">
+                      <button class="add-mat-btn" data-thick="2">+2 см</button>
+                      <button class="add-mat-btn" data-thick="3">+3 см</button>
+                    </div>
+                  </div>
+                  <div class="mat-card" data-mat="memory">
+                    <div class="mat-icon memory-icon"></div>
+                    <div class="mat-info">
+                      <h4>Memory Foam (Эффект памяти)</h4>
+                      <p>Адаптируется к форме тела</p>
+                    </div>
+                    <div class="thickness-select">
+                      <button class="add-mat-btn" data-thick="3">+3 см</button>
+                      <button class="add-mat-btn" data-thick="5">+5 см</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Step 3: Layer Stack Rearrange List -->
+          <div class="control-group glass-card">
+            <div class="group-title space-between">
+              <div class="title-left">
+                <span class="step-num">3</span>
+                <h3>Пирог Слоев (Сверху Вниз)</h3>
+              </div>
+              <button class="text-btn danger-text" id="clearLayersBtn">
+                <i data-lucide="trash-2"></i> Очистить
+              </button>
+            </div>
+            
+            <div class="layers-stack-list" id="layersStackContainer">
+              <!-- Dynamically Populated by App JS -->
+            </div>
+          </div>
+
+          <!-- Step 4: Outer Cover Upholstery -->
+          <div class="control-group glass-card">
+            <div class="group-title">
+              <span class="step-num">4</span>
+              <h3>Чехол Матраса</h3>
+            </div>
+            
+            <div class="cover-selector-grid">
+              <div class="cover-option active" data-cover="cotton">
+                <span class="cover-dot cotton"></span>
+                <div class="cover-meta">
+                  <strong>Органический Белый Трикотаж</strong>
+                  <span>Стеганый объемный чехол с пышными ромбами</span>
+                </div>
+              </div>
+              <div class="cover-option" data-cover="black">
+                <span class="cover-dot black"></span>
+                <div class="cover-meta">
+                  <strong>Black Quilted Edition</strong>
+                  <span>Премиальный черный стеганый жаккард</span>
+                </div>
+              </div>
+              <div class="cover-option" data-cover="cashmere">
+                <span class="cover-dot cashmere"></span>
+                <div class="cover-meta">
+                  <strong>Cashmere Gold Lux</strong>
+                  <span>Золотой шелковый кашемир</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </aside>
+
+        <!-- Right 3D Viewport Studio -->
+        <div class="viewport-area">
+          
+          <!-- 3D Canvas Studio Container -->
+          <div class="canvas-container" id="canvasContainer">
+            
+            <!-- Floating Viewport Control Toolbar -->
+            <div class="floating-view-toolbar">
+              <div class="toolbar-group">
+                <button class="icon-tool-btn" id="btnResetView" title="Сбросить Камеру">
+                  <i data-lucide="rotate-ccw"></i> 3D Обзор
+                </button>
+                <button class="icon-tool-btn" id="btnTopView" title="Вид Сверху">
+                  <i data-lucide="eye"></i> Сверху
+                </button>
+                <button class="icon-tool-btn" id="btnCutawayToggle" title="3D Срез Матраса">
+                  <i data-lucide="scissors"></i> 3D Срез
+                </button>
+                <button class="icon-tool-btn active" id="btnCoverToggle" title="Включить/Выключить Чехол">
+                  <i data-lucide="layers"></i> <span id="coverLabel">Чехол ВКЛ</span>
+                </button>
+              </div>
+
+              <!-- Exploded View Slider Controls -->
+              <div class="exploded-tool-bar">
+                <span class="tool-label"><i data-lucide="maximize-2"></i> Разбор Слоев:</span>
+                <input type="range" id="explodeSlider" min="0" max="1" step="0.01" value="0">
+                <span class="explode-val" id="explodeValueText">0%</span>
+              </div>
+            </div>
+
+            <!-- Canvas Loading Spinner -->
+            <div class="canvas-loader" id="canvasLoader">
+              <div class="spinner"></div>
+              <span>Загрузка 3D Студии...</span>
+            </div>
+
+            <!-- Interactive 3D Canvas Badge -->
+            <div class="canvas-overlay-badge">
+              <div class="badge-ring">3D</div>
+              <div class="badge-info">
+                <span class="badge-title">Вращайте зажав мышь</span>
+                <span class="badge-desc">Колесико — масштабирование</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Bottom Real-time Mattress Specifications Dashboard -->
+          <div class="stats-dashboard glass-card">
+            
+            <div class="stat-card">
+              <div class="stat-icon purple"><i data-lucide="ruler"></i></div>
+              <div class="stat-content">
+                <span class="stat-title">Толщина и Размеры</span>
+                <span class="stat-value" id="statHeight">21 см</span>
+                <span class="stat-sub" id="statDimensions">160 × 200 см</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon amber"><i data-lucide="activity"></i></div>
+              <div class="stat-content">
+                <span class="stat-title">Жесткость Матраса</span>
+                <span class="stat-value" id="statFirmness">Средний (6/10)</span>
+                <div class="firmness-meter">
+                  <div class="meter-bar" id="firmnessMeterBar" style="width: 60%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon green"><i data-lucide="shield-check"></i></div>
+              <div class="stat-content">
+                <span class="stat-title">Нагрузка на спальное место</span>
+                <span class="stat-value" id="statMaxLoad">140 кг / место</span>
+                <span class="stat-sub">Гарантия 5 лет</span>
+              </div>
+            </div>
+
+            <div class="stat-card total-price-card">
+              <div class="price-box">
+                <span class="price-title">Итоговая Цена:</span>
+                <span class="price-amount" id="statPrice">99 000 ₸</span>
+              </div>
+              <button class="primary-btn" id="statCheckoutBtn">
+                <i data-lucide="check"></i> Заказать
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 2: CATALOGUE -->
+    <section class="tab-pane" id="pane-catalogue">
+      <div class="catalog-header">
+        <h2>Официальная Коллекция ZHETISUMATRAS</h2>
+        <p>Готовые сбалансированные модели ортопедических матрасов фабричного производства</p>
+      </div>
+
+      <div class="catalog-grid" id="catalogGrid">
+        <!-- Dynamically Rendered Catalogue Models -->
+      </div>
+    </section>
+
+    <!-- TAB 3: FILLERS GUIDE -->
+    <section class="tab-pane" id="pane-guide">
+      <div class="guide-header">
+        <h2>Путеводитель по Наполнителям</h2>
+        <p>Узнайте о свойствах и ортопедических характеристиках каждого материала</p>
+      </div>
+
+      <div class="guide-grid">
+        <div class="guide-card glass-card">
+          <div class="guide-media coconut-bg">
+            <span class="tag">Экстра-Жесткий</span>
+          </div>
+          <div class="guide-body">
+            <h3>🌴 Кокосовая Койра</h3>
+            <p>100% натуральный материал из спрессованных волокон кокосового ореха, пропитанных натуральным латексом. Обеспечивает максимальную жесткость, ровное положение позвоночника и идеальную вентиляцию.</p>
+          </div>
+        </div>
+
+        <div class="guide-card glass-card">
+          <div class="guide-media latex-bg">
+            <span class="tag">Премиум Комфорт</span>
+          </div>
+          <div class="guide-body">
+            <h3>🍯 Натуральный Бельгийский Латекс</h3>
+            <p>Эластичный материал из сока гевеи с точечной микроперфорацией. Адаптируется под контуры тела, снимает напряжение в мышцах и суставах, выдерживает большие динамические нагрузки.</p>
+          </div>
+        </div>
+
+        <div class="guide-card glass-card">
+          <div class="guide-media foam-bg">
+            <span class="tag">Ортопедическая Пена</span>
+          </div>
+          <div class="guide-body">
+            <h3>☁️ Высокоэластичная Пена HR</h3>
+            <p>Гипоаллергенная ортопедическая пена высокой плотности. Служит надежной упругой основой для беспружинных матрасов и комфортным верхним слоем для пружинных моделей.</p>
+          </div>
+        </div>
+
+        <div class="guide-card glass-card">
+          <div class="guide-media memory-bg">
+            <span class="tag">Эффект Памяти</span>
+          </div>
+          <div class="guide-body">
+            <h3>💜 Memory Foam</h3>
+            <p>Инновационный космический материал, реагирующий на температуру и вес тела. Не оказывает обратного давления на сосуды, создавая чувство невесомости во время сна.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Order Checkout Modal -->
+  <div class="modal-backdrop" id="checkoutModal">
+    <div class="modal-dialog glass-card">
+      <div class="modal-header">
+        <div class="title-with-icon">
+          <i data-lucide="clipboard-check"></i>
+          <div>
+            <h3>Оформление Заказа Матраса</h3>
+            <p>ZHETISUMATRAS — Бланк конфигурации индивидуального пошива</p>
+          </div>
+        </div>
+        <button class="close-btn" id="closeCheckoutModal"><i data-lucide="x"></i></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="order-summary-grid">
+          
+          <div class="blueprint-card">
+            <h4><i data-lucide="box"></i> Спецификация Конструкции</h4>
+            <div class="blueprint-size-badge" id="modalSizeBadge">160 × 200 см • Высота 21 см</div>
+            
+            <ul class="blueprint-layers-list" id="modalLayersList">
+              <!-- Dynamically populated -->
+            </ul>
+
+            <div class="blueprint-totals">
+              <div class="b-row"><span>Жесткость:</span> <strong id="modalFirmness">Средний (6/10)</strong></div>
+              <div class="b-row"><span>Чехол:</span> <strong id="modalCoverName">Органический Трикотаж</strong></div>
+              <div class="b-row total"><span>Итого к оплате:</span> <strong id="modalTotalPrice">99 000 ₸</strong></div>
+            </div>
+          </div>
+
+          <form class="checkout-form" id="checkoutForm">
+            <h4><i data-lucide="user"></i> Данные Доставки</h4>
+            
+            <div class="form-group">
+              <label>Ваше Имя и Фамилия:</label>
+              <input type="text" required placeholder="Например: Арман Сарманов">
+            </div>
+
+            <div class="form-group">
+              <label>Номер Телефона (WhatsApp):</label>
+              <input type="tel" required placeholder="+7 (777) 000-00-00">
+            </div>
+
+            <div class="form-group">
+              <label>Город и Адрес Доставки:</label>
+              <input type="text" required placeholder="г. Алматы, ул. Абая 150, кв. 45">
+            </div>
+
+            <div class="form-group">
+              <label>Комментарий к заказу:</label>
+              <textarea rows="2" placeholder="Дополнительные пожелания к доставке..."></textarea>
+            </div>
+
+            <button type="submit" class="primary-btn submit-order-btn pulse-glow">
+              <i data-lucide="send"></i> Подтвердить Заказ Матраса
+            </button>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Application Logic Modules -->
+  <script type="module" src="./app.js"></script>
+
+</body>
+</html>
