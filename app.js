@@ -237,6 +237,7 @@ class MattressApp {
     this.cartCount = 0;
 
     this.initUI();
+    this.initBannerSlider();
     this.init3DStudio();
     this.renderCatalogue();
     this.updateCalculations();
@@ -369,6 +370,80 @@ class MattressApp {
       e.preventDefault();
       this.handleOrderSubmit();
     });
+  }
+
+  initBannerSlider() {
+    const track = document.getElementById('sliderTrack');
+    const wrapper = document.getElementById('bannerSliderWrapper');
+    const prevBtn = document.getElementById('slidePrevBtn');
+    const nextBtn = document.getElementById('slideNextBtn');
+    const dots = document.querySelectorAll('#sliderDots .dot');
+
+    if (!track || !wrapper) return;
+
+    let currentIndex = 0;
+    const totalSlides = 3;
+    let autoSlideTimer = null;
+
+    const updateSlider = (index) => {
+      currentIndex = (index + totalSlides) % totalSlides;
+      track.style.transform = `translateX(-${currentIndex * 100}%)`;
+      dots.forEach((dot, idx) => {
+        dot.classList.toggle('active', idx === currentIndex);
+      });
+    };
+
+    const nextSlide = () => updateSlider(currentIndex + 1);
+    const prevSlide = () => updateSlider(currentIndex - 1);
+
+    if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+    if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const idx = parseInt(dot.getAttribute('data-index'));
+        updateSlider(idx);
+      });
+    });
+
+    // Touch Swipe Gesture Support for Smartphones
+    let startX = 0;
+    let currentX = 0;
+    let isDragging = false;
+
+    wrapper.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+      isDragging = true;
+      clearInterval(autoSlideTimer);
+    }, { passive: true });
+
+    wrapper.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      currentX = e.touches[0].clientX;
+    }, { passive: true });
+
+    wrapper.addEventListener('touchend', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      const diffX = startX - currentX;
+      if (Math.abs(diffX) > 40 && currentX !== 0) {
+        if (diffX > 0) nextSlide();
+        else prevSlide();
+      }
+      startX = 0; currentX = 0;
+      startAutoSlide();
+    });
+
+    // Auto-slide timer every 4.5 seconds
+    const startAutoSlide = () => {
+      clearInterval(autoSlideTimer);
+      autoSlideTimer = setInterval(nextSlide, 4500);
+    };
+
+    wrapper.addEventListener('mouseenter', () => clearInterval(autoSlideTimer));
+    wrapper.addEventListener('mouseleave', startAutoSlide);
+
+    startAutoSlide();
   }
 
   init3DStudio() {
