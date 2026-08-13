@@ -377,12 +377,12 @@ class MattressApp {
     const wrapper = document.getElementById('bannerSliderWrapper');
     const prevBtn = document.getElementById('slidePrevBtn');
     const nextBtn = document.getElementById('slideNextBtn');
-    const dots = document.querySelectorAll('#sliderDots .dot');
+    const dots = document.querySelectorAll('#sliderDots .progress-dot');
 
     if (!track || !wrapper) return;
 
     let currentIndex = 0;
-    const totalSlides = 3;
+    const totalSlides = 4;
     let autoSlideTimer = null;
 
     const updateSlider = (index) => {
