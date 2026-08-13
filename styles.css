@@ -152,11 +152,10 @@ body {
 
 /* Ultra-Trendy Luxury Advertising Swipable Slider Banner */
 .trendy-banner-section {
-  background: linear-gradient(180deg, #064e3b 0%, #022c22 100%);
-  padding: 1rem 1.25rem;
+  background: transparent;
+  padding: 1.25rem 1.5rem 0.5rem 1.5rem;
   position: relative;
   overflow: hidden;
-  border-bottom: 1px solid rgba(16, 185, 129, 0.25);
 }
 
 .trendy-slider-container {
@@ -165,7 +164,7 @@ body {
   position: relative;
   border-radius: var(--radius-xl);
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(16, 185, 129, 0.15);
+  box-shadow: 0 12px 35px rgba(5, 150, 105, 0.15);
   background: #047857;
   touch-action: pan-y;
   user-select: none;
