@@ -372,19 +372,19 @@ class MattressApp {
     const cityGroup = document.getElementById('cityFieldsGroup');
     const villageGroup = document.getElementById('villageFieldsGroup');
 
-    if (chipCity && chipVillage) {
+    if (chipCity && chipVillage && cityGroup && villageGroup) {
       chipCity.addEventListener('click', () => {
         chipCity.classList.add('active');
         chipVillage.classList.remove('active');
-        cityGroup.classList.remove('hidden');
-        villageGroup.classList.add('hidden');
+        cityGroup.style.display = 'flex';
+        villageGroup.style.display = 'none';
       });
 
       chipVillage.addEventListener('click', () => {
         chipVillage.classList.add('active');
         chipCity.classList.remove('active');
-        villageGroup.classList.remove('hidden');
-        cityGroup.classList.add('hidden');
+        villageGroup.style.display = 'flex';
+        cityGroup.style.display = 'none';
       });
     }
 
@@ -843,8 +843,8 @@ class MattressApp {
     if (chipCity && chipVillage && cityGroup && villageGroup) {
       chipCity.classList.add('active');
       chipVillage.classList.remove('active');
-      cityGroup.classList.remove('hidden');
-      villageGroup.classList.add('hidden');
+      cityGroup.style.display = 'flex';
+      villageGroup.style.display = 'none';
     }
 
     document.getElementById('checkoutModal').classList.add('open');
